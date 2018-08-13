@@ -25,6 +25,8 @@ def is_dupe(db, collection, record, keys=None):
         if isinstance(keys, list):
             _keys = {i:record[i] for i in keys}
             db[collection].find(_keys)[0]
+        if isinstance(keys, str):
+            db[collection].find({keys:record[keys]})
         else:
             db[collection].find(record)[0]
         return True
@@ -32,13 +34,13 @@ def is_dupe(db, collection, record, keys=None):
         return False
 
 
-def insert_record(db,collection,record):
+def insert_record(db,collection,record, keys=None):
     if isinstance(record, dict):
-        if not is_dupe(db,collection,record):
+        if not is_dupe(db,collection,record, keys):
             db[collection].insert_one(record)
             return 1
     elif isinstance(record, list):
-        records=[r for r in record if not is_dupe(db,collection,r)]
+        records=[r for r in record if not is_dupe(db,collection,r, keys)]
         if len(records)>0:
             logging.info("Inserted {0} records using bulk option".format(len(records)))
             db[collection].insert_many(records)

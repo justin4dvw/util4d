@@ -10,8 +10,7 @@ setup(name='util4d',
       packages=['util4d'],
       install_requires=[
           'pymongo',
-          'pyaml',
-          'geocoder'
+          'pyaml'
       ],
       zip_safe=False
       )
