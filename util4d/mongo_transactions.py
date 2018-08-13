@@ -20,9 +20,13 @@ def connect_to_mongo(credential_file=None):
 
     return client
 
-def is_dupe(db, collection, record):
+def is_dupe(db, collection, record, keys=None):
     try:
-        db[collection].find(record)[0]
+        if isinstance(keys, list):
+            _keys = {i:record[i] for i in keys}
+            db[collection].find(_keys)[0]
+        else:
+            db[collection].find(record)[0]
         return True
     except:
         return False
